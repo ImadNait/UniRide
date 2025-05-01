@@ -7,11 +7,22 @@ public class Utilisateur {
     private float reputation ;
 // change encapsulation accordingly and without altering the means of security
 
-    Utilisateur(String nom, String prenom, double matricule) {
-        this.nom = nom;
-        this.prenom = prenom;
+    Utilisateur(String nom, String prenom, double matricule, float rep) {
+       //in main when added to main delete here
+        // if (nom instanceof String && nom.matches("^[a-zA-Z]+$")) { // chooses only the values that contain just letters
+            this.nom = nom;
+        // }else{
+         //   System.out.println("Invalid type of input nom has to be a String with only letters");
+        // }
+       // if (prenom instanceof String && prenom.matches("^[a-zA-Z]+$")) { // chooses only the values that contain just letters
+            this.prenom = prenom;
+        // }else{
+         //   System.out.println("Invalid type of input prenom has to be a String with only letters");
+        //}
+
         this.matricule = matricule;
-        this.reputation = 0;
+        if (rep >= 0 && rep <= 6) {this.reputation = rep;}
+        else{ System.out.println("Value entered out of range choose a value between 1 and 5");}
 
     }
 
@@ -29,7 +40,8 @@ public class Utilisateur {
     }
 
     protected void setReputation(float rep) {
-        this.reputation = rep;
+        if (rep >= 0 && rep <= 5) {this.reputation = rep;}
+        else{ System.out.println("Value entered out of range choose a value between 1 and 5");}
     }
 
 
