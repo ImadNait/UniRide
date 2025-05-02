@@ -56,6 +56,7 @@ public class Profile extends Utilisateur{
         return (moyPass + moyChauff) / (nbPass + nbChauff);
     }
 
+
     public void refreshMoyenne(float rating) {
         if (status == status.Passager) {
             moyPass += rating;
