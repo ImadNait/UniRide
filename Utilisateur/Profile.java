@@ -60,10 +60,6 @@ public class Profile extends Utilisateur{
 
 
 
-
-
-
-
     public Profile(String nom, String prenom, double matricule) {
         super(nom, prenom, matricule);
     }
