@@ -78,10 +78,13 @@ public class Profile extends Utilisateur{
         setReputation(calculMoyenne());
     }
 
-
-
-
-    public Profile(String nom, String prenom, double matricule) {
+    public Profile(String nom, String prenom, double matricule, status status, List<String> itineraire, List<String> preferences, horaire horaire, type type) {
         super(nom, prenom, matricule);
+        this.status = status;
+        this.itineraire = itineraire;
+        this.preferences = preferences;
+        this.horaire = horaire;
+        this.type = type;
     }
+
 }
