@@ -7,9 +7,9 @@ public class Profile extends Utilisateur{
     private status status;
     private List<String> itineraire;
     private List<String> preferences;
-    private enum horaire { Journalier, Hebdomadaire, Quotidien };
+    private enum horaire { Journalier, Hebdomadaire, Quotidien }
     private horaire horaire;
-    private enum type { allerRetour, aller, retour };
+    private enum type { allerRetour, aller, retour }
     private type type;
     private float moyPass = 0;
     private float moyChauff = 0;
@@ -37,7 +37,7 @@ public class Profile extends Utilisateur{
     public horaire getHoraire() {
         return horaire;
     }
-    public void setHoraire(horaire horaire) {
+    public void changeHoraire(horaire horaire) {
         this.horaire = horaire;
     }
     public type  getType() {
@@ -49,6 +49,27 @@ public class Profile extends Utilisateur{
     public void switchStatus() {
         this.status = (this.status == status.Passager) ? status.Chauffeur : status.Passager;
     }
+    public float calculMoyenne() {
+        if (nbPass == 0 && nbChauff == 0) return 0;
+        if (status == status.Passager) return moyPass / nbChauff;
+        if (status == status.Chauffeur) return moyChauff / nbPass;
+        return (moyPass + moyChauff) / (nbPass + nbChauff);
+    }
+
+    public void refreshMoyenne(float rating) {
+        if (status == status.Passager) {
+            moyPass += rating;
+            nbPass++;
+        } else {
+            moyChauff += rating;
+            nbChauff++;
+        }
+        setReputation(calculMoyenne());
+    }
+
+
+
+
     public Profile(String nom, String prenom, double matricule) {
         super(nom, prenom, matricule);
     }
