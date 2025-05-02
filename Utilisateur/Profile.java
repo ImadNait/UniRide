@@ -49,7 +49,6 @@ public class Profile extends Utilisateur{
     public void switchStatus() {
         this.status = (this.status == status.Passager) ? status.Chauffeur : status.Passager;
     }
-
     public Profile(String nom, String prenom, double matricule) {
         super(nom, prenom, matricule);
     }
