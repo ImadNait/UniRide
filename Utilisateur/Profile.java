@@ -19,43 +19,53 @@ public class Profile extends Utilisateur{
     public status getStatus() {
         return status;
     }
+
     public void setStatus(status status) {
         this.status = status;
     }
+
     public List<String> getItineraire() {
         return itineraire;
     }
+
     public void setItineraire(List<String> itineraire) {
         this.itineraire = itineraire;
     }
+
     public List<String> getPreferences() {
         return preferences;
     }
+
     public void setPreferences(List<String> preferences) {
         this.preferences = preferences;
     }
+
     public horaire getHoraire() {
         return horaire;
     }
+
     public void changeHoraire(horaire horaire) {
         this.horaire = horaire;
     }
+
     public type  getType() {
         return type;
     }
+
     public void changeType(type type) {
         this.type = type;
     }
+
     public void switchStatus() {
         this.status = (this.status == status.Passager) ? status.Chauffeur : status.Passager;
     }
+
     public float calculMoyenne() {
         if (nbPass == 0 && nbChauff == 0) return 0;
         if (status == status.Passager) return moyPass / nbChauff;
         if (status == status.Chauffeur) return moyChauff / nbPass;
         return (moyPass + moyChauff) / (nbPass + nbChauff);
     }
-
 
     public void refreshMoyenne(float rating) {
         if (status == status.Passager) {
