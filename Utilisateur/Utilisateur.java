@@ -79,7 +79,7 @@ public class Utilisateur {
         }
     }
     void showUser(String[] fmat) throws IOException {System.out.println(fmat[0]+"\n"+fmat[1]+"\n"+fmat[2]+"\n"+fmat[3]+"\n");}
-    void showUser(String[] fmat,int i) throws IOException { /// overiding showUser to show a certain number of users passed through the variable i
+    void showUser(String[] fmat,int i) throws IOException { /// overloaded showUser to show a certain number of users passed through the variable i
         if (i==0){return;} else if (i>3 || i<0) {
             System.out.println("the number has to be between 1 and 4");
         }else{
