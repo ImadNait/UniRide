@@ -72,7 +72,7 @@ public class Utilisateur {
         reader.close();
     }
     void findUser(double mat) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(fpath));
+        BufferedReader reader  = new BufferedReader(new FileReader(fpath));
         String user = reader.readLine();
         boolean found = false;
 
