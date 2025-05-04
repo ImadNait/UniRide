@@ -11,7 +11,6 @@ public class Utilisateur {
     private float reputation ;
     private static final String fpath = "users.txt";
 
-
     // change encapsulation accordingly and without altering the means of security
     Utilisateur(String nom, String prenom, double matricule, float rep) throws IOException { // throws IOException is used to be able to use the fileWriter
 
@@ -23,7 +22,7 @@ public class Utilisateur {
         this.matricule = matricule;
         BufferedWriter writer = new BufferedWriter(new FileWriter(fpath,true));
         setReputation(rep);
-        writer.write(matricule + "," + nom + "," + prenom + "," + rep + "\n");
+        writer.write(String.format("%.0f",matricule) + "," + nom + "," + prenom + "," + rep + "\n");
         writer.close();
     }
     protected String getNom() {return this.nom;}
@@ -34,9 +33,8 @@ public class Utilisateur {
         if(checkRep(rep)){this.reputation = rep;}
         else{ System.out.println("Value entered out of range choose a value between 1 and 5");}
     }
-    public boolean checkRep(float rep){
-        return rep >= 0 && rep <= 5;
-    }
+    public boolean checkRep(float rep){return rep >= 0 && rep <= 5;}
+
     public boolean checkNP(Object temp) {
 // i did object temp to implement oop by checking its type with instanceof it will be dealt with if it causes any problems
         if (temp instanceof String) {
@@ -48,6 +46,7 @@ public class Utilisateur {
         BufferedReader reader = new BufferedReader(new FileReader(fpath));
         String line = reader.readLine();
         String[] user = line.split(",");
+
         while(line != null) {
             line = reader.readLine();
             user = line.split(",");
@@ -59,6 +58,7 @@ public class Utilisateur {
     void printUsers(int i) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(fpath));
         String[] user = reader.readLine().split(",");
+
         while(i>0) {
             user = reader.readLine().split(",");
             showUser(user);
@@ -67,13 +67,14 @@ public class Utilisateur {
         reader.close();
     }
     boolean findUser(double mat) throws IOException {
-        BufferedReader reader  = new BufferedReader(new FileReader(fpath));
+        BufferedReader reader = new BufferedReader(new FileReader(fpath));
         String user = reader.readLine();
         boolean found = false;
 
         while (user != null) {
             String[] fmat = user.split(",");
             if (fmat.length > 0 && Double.parseDouble(fmat[0]) == mat) {
+                System.out.println("User with matricule " + mat + " found.");
                 showUser(fmat);
                 return true ;
             }
@@ -97,5 +98,4 @@ public class Utilisateur {
         }else{
             while(i>0){System.out.println(fmat[i]+"\n"); i--;}}
     }
-
 }
