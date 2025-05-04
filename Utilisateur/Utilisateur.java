@@ -1,21 +1,18 @@
 package Utilisateur;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.*;
-import java.util.*;
 
 
 public class Utilisateur {
 
-    private final String nom;
-    private final String prenom;
-    private final double matricule;
-    private float reputation;
+    private final String nom ;
+    private final String prenom ;
+    private final double matricule ;
+    private float reputation ;
     private static final String fpath = "users.txt";
-    BufferedWriter writer = new BufferedWriter(new FileWriter(fpath, true)); // true = append mode
-    BufferedReader reader = new BufferedReader(new FileReader(fpath));
 
+
+    // change encapsulation accordingly and without altering the means of security
     Utilisateur(String nom, String prenom, double matricule, float rep) throws IOException { // throws IOException is used to be able to use the fileWriter
 
         if (!checkNP(nom) || !checkNP(prenom)) {
@@ -24,163 +21,79 @@ public class Utilisateur {
         this.nom = nom;
         this.prenom = prenom;
         this.matricule = matricule;
+        BufferedWriter writer = new BufferedWriter(new FileWriter(fpath,true));
         setReputation(rep);
         writer.write(matricule + "," + nom + "," + prenom + "," + rep + "\n");
         writer.close();
     }
-
-    protected String getNom() {
-        return this.nom;
-    }
-
-    protected String getPrenom() {
-        return this.prenom;
-    }
-
-    protected double getMatricule() {
-        return this.matricule;
-    }
-
-    protected float getReputation() {
-        return this.reputation;
-    }
-
+    protected String getNom() {return this.nom;}
+    protected String getPrenom() {return this.prenom;}
+    protected double getMatricule() {return this.matricule;}
+    protected float getReputation() {return this.reputation;}
     protected void setReputation(float rep) {
-        if (checkRep(rep)) {
-            this.reputation = rep;
-        } else {
-            System.out.println("Value entered out of range choose a value between 1 and 5");
-        }
+        if(checkRep(rep)){this.reputation = rep;}
+        else{ System.out.println("Value entered out of range choose a value between 1 and 5");}
     }
-
-    public boolean checkRep(float rep) {
+    public boolean checkRep(float rep){
         return rep >= 0 && rep <= 5;
     }
-
     public boolean checkNP(Object temp) {
+// i did object temp to implement oop by checking its type with instanceof it will be dealt with if it causes any problems
         if (temp instanceof String) {
             String name = (String) temp;
-            return name.matches("^[\\p{L}]+$");
-        }
+            return name.matches("^[\\p{L}]+$");}//check if name is in any language ^[\p{L}]+$ <- this means all letters in all languages upper & lower case
         return false;
     }
-
     void printUsers() throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(fpath));
         String line = reader.readLine();
         String[] user = line.split(",");
-        while (line != null) {
+        while(line != null) {
             line = reader.readLine();
             user = line.split(",");
             showUser(user);
         }
+        reader.close();
     }
-
+    /// overloaded the printUsers method to display a certain amount of users
     void printUsers(int i) throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(fpath));
         String[] user = reader.readLine().split(",");
-        while (i > 0) {
+        while(i>0) {
             user = reader.readLine().split(",");
             showUser(user);
             i--;
         }
+        reader.close();
     }
-
     void findUser(double mat) throws IOException {
-        String[] fmat = reader.readLine().split(",");
-        boolean notfound = false;
-        if (String.valueOf(mat) == null) {
-            System.out.println("mat should not be null");
-        } else {
-            while (String.valueOf(mat) != fmat[1]) {
-                fmat = reader.readLine().split(",");
-                if (reader.readLine() == null) {
-                    notfound = true;
-                    return;
-                }
-            }
-            showUser(fmat);
-        }
-    }
+        BufferedReader reader  = new BufferedReader(new FileReader(fpath));
+        String user = reader.readLine();
+        boolean found = false;
 
-    void showUser(String[] fmat) throws IOException {
-        System.out.println(fmat[0] + "\n" + fmat[1] + "\n" + fmat[2] + "\n" + fmat[3] + "\n");
-    }
-
-    void showUser(String[] fmat, int i) throws IOException {
-        if (i == 0) {
-            return;
-        } else if (i > 3 || i < 0) {
-            System.out.println("the number has to be between 1 and 4");
-        } else {
-            while (i > 0) {
-                System.out.println(fmat[i] + "\n");
-                i--;
+        while (user != null) {
+            String[] fmat = user.split(",");
+            if (fmat.length > 0 && Double.parseDouble(fmat[0]) == mat) {
+                showUser(fmat);
+                break;
             }
         }
-    }
-
-    public static void main(String args[]) throws IOException {
-        Scanner sc = new Scanner(System.in);
-
-        while (true) {
-            System.out.println("\n==== Menu ====");
-            System.out.println("1. Create new user");
-            System.out.println("2. View all users");
-            System.out.println("3. Exit");
-            System.out.print("Choose an option: ");
-
-            int choice = sc.nextInt();
-            sc.nextLine(); // Consume newline
-
-            switch (choice) {
-                case 1:
-                    createUser(sc);
-                    break;
-                case 2:
-                    viewAllUsers();
-                    break;
-                case 3:
-                    System.out.println("Exiting program...");
-                    System.exit(0);
-                default:
-                    System.out.println("Invalid choice!");
-            }
+        if (!found) {
+            System.out.println("User with matricule " + mat + " not found.");
         }
+        reader.close();
     }
+    /// overloading findUser to find up to four users
+    void findUser(double mat1, double mat2) throws IOException {findUser(mat1);findUser(mat2);}
+    void findUser(double mat1, double mat2 , double mat3) throws IOException {findUser(mat1);findUser(mat2);findUser(mat3);}
+    void findUser(double mat1, double mat2 , double mat3, double mat4) throws IOException {findUser(mat1);findUser(mat2);findUser(mat3);findUser(mat4);}
 
-    private static void createUser(Scanner sc) throws IOException {
-        System.out.println("\n=== Create New User ===");
-        System.out.print("Name: ");
-        String name = sc.nextLine();
-        System.out.print("Prenom: ");
-        String prenom = sc.nextLine();
-        System.out.print("Matricule: ");
-        double matricule = sc.nextDouble();
-        System.out.print("Reputation: ");
-        float reputation = sc.nextFloat();
-
-        try {
-            Utilisateur usr = new Utilisateur(name, prenom, matricule, reputation);
-            System.out.println(usr.getPrenom() + " has been created successfully!");
-        } catch (Exception e) {
-            System.out.println("Error creating user: " + e.getMessage());
-        }
-    }
-
-    private static void viewAllUsers() {
-        System.out.println("\n=== All Users ===");
-        try (BufferedReader reader = new BufferedReader(new FileReader(fpath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] user = line.split(",");
-                System.out.println("Matricule: " + user[0]);
-                System.out.println("Nom: " + user[1]);
-                System.out.println("Prenom: " + user[2]);
-                System.out.println("Reputation: " + user[3]);
-                System.out.println("-------------------");
-            }
-        } catch (IOException e) {
-            System.out.println("Error reading users: " + e.getMessage());
-        }
+    void showUser(String[] fmat) throws IOException {System.out.println("Matricule: " + fmat[0] + "\nNom: " + fmat[1] + "\nPrenom: " + fmat[2] + "\nReputation: " + fmat[3] + "\n-------------------------------------");}
+    void showUser(String[] fmat,int i) throws IOException { /// overloaded showUser to show a certain number of users which is contained in the variable i
+        if (i==0){return;} else if (i>3 || i<0) {
+            System.out.println("the number has to be between 1 and 4"); return;
+        }else{
+            while(i>0){System.out.println(fmat[i]+"\n"); i--;}}
     }
 
 }
