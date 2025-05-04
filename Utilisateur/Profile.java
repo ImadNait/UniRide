@@ -175,7 +175,6 @@ public class Profile extends Utilisateur{
             System.out.print("Statut (1-Passager, 2-Chauffeur): ");
             status statut = (sc.nextInt() == 1) ? status.Passager : status.Chauffeur;
             sc.nextLine();
-
             System.out.println("Itinéraire habituel (séparé par des virgules): ");
             List<String> itineraire = Arrays.asList(sc.nextLine().split(","));
 
