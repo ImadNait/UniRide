@@ -66,7 +66,7 @@ public class Utilisateur {
         }
         reader.close();
     }
-    void findUser(double mat) throws IOException {
+    boolean findUser(double mat) throws IOException {
         BufferedReader reader  = new BufferedReader(new FileReader(fpath));
         String user = reader.readLine();
         boolean found = false;
@@ -75,13 +75,15 @@ public class Utilisateur {
             String[] fmat = user.split(",");
             if (fmat.length > 0 && Double.parseDouble(fmat[0]) == mat) {
                 showUser(fmat);
-                break;
+                return true ;
             }
+            fmat = user.split(",");
         }
         if (!found) {
             System.out.println("User with matricule " + mat + " not found.");
         }
         reader.close();
+        return found;
     }
     /// overloading findUser to find up to four users
     void findUser(double mat1, double mat2) throws IOException {findUser(mat1);findUser(mat2);}
