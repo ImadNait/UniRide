@@ -1,9 +1,6 @@
 package Utilisateur;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.*;
-import java.util.*;
 
 
 public class Utilisateur {
@@ -15,8 +12,6 @@ public class Utilisateur {
     private static final String fpath = "users.txt";
 
 
-
-
     // change encapsulation accordingly and without altering the means of security
     Utilisateur(String nom, String prenom, double matricule, float rep) throws IOException { // throws IOException is used to be able to use the fileWriter
 
@@ -26,8 +21,8 @@ public class Utilisateur {
         this.nom = nom;
         this.prenom = prenom;
         this.matricule = matricule;
-        setReputation(rep);
         BufferedWriter writer = new BufferedWriter(new FileWriter(fpath,true));
+        setReputation(rep);
         writer.write(matricule + "," + nom + "," + prenom + "," + rep + "\n");
         writer.close();
     }
