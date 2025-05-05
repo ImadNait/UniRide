@@ -13,5 +13,5 @@ public class Ats extends Utilisateur {
     protected int getAnneeRecrutement() {return this.anneeRecrutement;}
     protected void setAnneeRecrutement(int anneeRecrutement) {this.anneeRecrutement = anneeRecrutement;}
     protected String getService() {return this.service;}
-    protected void setService(String service) {this.service = this.service;}
+    protected void setService(String service) {this.service = service;}
 }
