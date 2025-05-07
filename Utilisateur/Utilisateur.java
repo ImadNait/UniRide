@@ -1,8 +1,7 @@
 package Utilisateur;
 
 import java.io.*;
-import java.time.LocalDate;
-
+import java.util.Scanner;
 
 public class Utilisateur {
 
@@ -11,22 +10,17 @@ public class Utilisateur {
     private final double matricule ;
     private float reputation ;
     private static final String fpath = "users.txt";
-
+    protected final String typeUser;
     // change encapsulation accordingly and without altering the means of security
     Utilisateur(String nom, String prenom, double matricule, float rep) throws IOException { // throws IOException is used to be able to use the fileWriter
-
         BufferedWriter writer = new BufferedWriter(new FileWriter(fpath,true));
 
-        if (!checkNP(nom) || !checkNP(prenom)) {
-            throw new IllegalArgumentException("The name should contain letters only"); // to get rid of the might not be init for final variables problem fixed
-        }
-        if (checkDate(matricule)) {
-            this.matricule = matricule;
-        }
+        if (!checkNP(nom) || !checkNP(prenom)) {throw new IllegalArgumentException("The name should contain letters only");} // to get rid of the might not be init for final variables problem fixed
+        if (checkDate(matricule)) {this.matricule = matricule;}
         else{throw new IllegalArgumentException("Invalid matricule year, Try again");}  // to get rid of the might not be init for final variables problem fixed
         this.nom = nom;
         this.prenom = prenom;
-
+        this.typeUser = checkTypeUser();
 
         setReputation(rep);
         writer.write(String.format("%.0f",matricule) + "," + nom + "," + prenom + "," + rep + "\n");
@@ -118,5 +112,24 @@ public class Utilisateur {
             return false;
         }
         return y1 > ymat || y2 > ymat;
+    }
+
+    String checkTypeUser(){
+        Scanner sc = new Scanner(System.in);
+        while (true) {
+            System.out.println("Choose user type :\n");
+            System.out.println("1 - ETUDIANT\n2 - ENSEIGNANT\n3 - ATS");
+            int choice = sc.nextInt();
+            switch (choice) {
+                case 1:
+                    return "ETUDIANT";
+                case 2:
+                    return "ENSEIGNANT";
+                case 3:
+                    return "ATS";
+                default:
+                    System.out.println("invalid input");
+            }
+        }
     }
 }
