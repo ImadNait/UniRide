@@ -9,11 +9,11 @@ public class Utilisateur {
     private final String prenom ;
     private final double matricule ;
     private float reputation ;
-    private static final String fpath = "users.txt";
+    protected static final String fpath = "users.txt";
     protected final String typeUser;
     // change encapsulation accordingly and without altering the means of security
     Utilisateur(String nom, String prenom, double matricule, float rep) throws IOException { // throws IOException is used to be able to use the fileWriter
-        BufferedWriter writer = new BufferedWriter(new FileWriter(fpath,true));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(fpath,true));
 
         if (!checkNP(nom) || !checkNP(prenom)) {throw new IllegalArgumentException("The name should contain letters only");} // to get rid of the might not be init for final variables problem fixed
         if (checkDate(matricule)) {this.matricule = matricule;}
@@ -67,7 +67,7 @@ public class Utilisateur {
         }
         reader.close();
     }
-    boolean findUser(double mat) throws IOException {
+    public boolean findUser(double mat) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(fpath));
         String user = reader.readLine();
         boolean found = false;
