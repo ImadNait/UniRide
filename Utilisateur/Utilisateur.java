@@ -26,6 +26,8 @@ public class Utilisateur {
         writer.write(String.format("%.0f",matricule) + "," + nom + "," + prenom + "," + rep + "\n");
         writer.close();
     }
+
+
     protected String getNom() {return this.nom;}
     protected String getPrenom() {return this.prenom;}
     protected double getMatricule() {return this.matricule;}
