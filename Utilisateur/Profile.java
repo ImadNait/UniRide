@@ -172,6 +172,7 @@ public class Profile extends Utilisateur{
             float reputation = sc.nextFloat();
             sc.nextLine();
 
+
             System.out.print("Statut (1-Passager, 2-Chauffeur): ");
             status statut = (sc.nextInt() == 1) ? status.Passager : status.Chauffeur;
             sc.nextLine();

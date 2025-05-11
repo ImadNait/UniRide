@@ -1,11 +1,13 @@
 package Utilisateur;
 
+import java.io.IOException;
+
 public class Ats extends Utilisateur {
     private int anneeRecrutement;
     private String service;
 
     public Ats(String nom, String prenom, double matricule, float repuation,
-               int anneeRecrutement, String service) {
+               int anneeRecrutement, String service) throws IOException {
         super(nom, prenom, matricule, repuation);
         this.anneeRecrutement = anneeRecrutement;
         this.service = service;

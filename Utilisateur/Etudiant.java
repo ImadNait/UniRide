@@ -1,11 +1,13 @@
 package Utilisateur;
 
+import java.io.IOException;
+
 public class Etudiant extends Utilisateur   {
     private String specialite;
     private int anneeadmission;
     private String faculte;
 
-    public Etudiant(String nom, String prenom, double matricule,float repuation, int anneeadmission, String faculte, String specialite) {
+    public Etudiant(String nom, String prenom, double matricule,float repuation, int anneeadmission, String faculte, String specialite) throws IOException {
         super(nom, prenom, matricule, repuation);
         this.anneeadmission = anneeadmission;
         this.faculte = faculte;
