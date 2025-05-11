@@ -9,11 +9,11 @@ public class Utilisateur {
     private final String prenom ;
     private final double matricule ;
     private float reputation ;
-    private static final String fpath = "users.txt";
+    protected static final String fpath = "users.txt";
     protected final String typeUser;
     // change encapsulation accordingly and without altering the means of security
     Utilisateur(String nom, String prenom, double matricule, float rep) throws IOException { // throws IOException is used to be able to use the fileWriter
-        BufferedWriter writer = new BufferedWriter(new FileWriter(fpath,true));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(fpath,true));
 
         if (!checkNP(nom) || !checkNP(prenom)) {throw new IllegalArgumentException("The name should contain letters only");} // to get rid of the might not be init for final variables problem fixed
         if (checkDate(matricule)) {this.matricule = matricule;}
@@ -26,6 +26,8 @@ public class Utilisateur {
         writer.write(String.format("%.0f",matricule) + "," + nom + "," + prenom + "," + rep + "\n");
         writer.close();
     }
+
+
     protected String getNom() {return this.nom;}
     protected String getPrenom() {return this.prenom;}
     protected double getMatricule() {return this.matricule;}
@@ -67,7 +69,7 @@ public class Utilisateur {
         }
         reader.close();
     }
-    boolean findUser(double mat) throws IOException {
+    public static boolean findUser(double mat) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(fpath));
         String user = reader.readLine();
         boolean found = false;
@@ -92,7 +94,7 @@ public class Utilisateur {
     void findUser(double mat1, double mat2 , double mat3) throws IOException {findUser(mat1);findUser(mat2);findUser(mat3);}
     void findUser(double mat1, double mat2 , double mat3, double mat4) throws IOException {findUser(mat1);findUser(mat2);findUser(mat3);findUser(mat4);}
 
-    void showUser(String[] fmat) throws IOException {System.out.println("Matricule: " + fmat[0] + "\nNom: " + fmat[1] + "\nPrenom: " + fmat[2] + "\nReputation: " + fmat[3] + "\n-------------------------------------");}
+    static void showUser(String[] fmat) throws IOException {System.out.println("Matricule: " + fmat[0] + "\nNom: " + fmat[1] + "\nPrenom: " + fmat[2] + "\nReputation: " + fmat[3] + "\n-------------------------------------");}
     void showUser(String[] fmat,int i) throws IOException { /// overloaded showUser to show a certain number of users which is contained in the variable i
         if (i==0){return;} else if (i>3 || i<0) {
             System.out.println("The number has to be between 1 and 4"); return;
