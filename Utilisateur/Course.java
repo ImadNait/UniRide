@@ -118,7 +118,15 @@ public class Course {
         this.commentChauffeur = commChauff;
         this.commentPassager = commPass;
         updateCourseFile();
-        updateUserStats();
+
+        // Get the Profile objects for the driver and passenger
+        Profile chauffeur = Profile.getProfileByMatricule(this.matChauffeur);
+        Profile passager = Profile.getProfileByMatricule(this.matPassager);
+
+        // Update both user ratings at once
+        if (chauffeur != null && passager != null) {
+            Profile.refreshMoyenne(chauffeur, passager, noteChauff, notePass);
+        }
     }
 
     private void updateCourseFile() throws IOException {
