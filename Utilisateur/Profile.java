@@ -28,6 +28,7 @@ public class Profile extends Utilisateur{
     private float moyChauff = 0;
     private int nbPass = 0;
     private int nbChauff = 0;
+    private final String role;
     private static final String FICHIER_DEMANDES = "demands.txt";
     private static final String FICHIER_PROFILES = "profiles.txt";
 
@@ -73,6 +74,8 @@ public class Profile extends Utilisateur{
     public void changeType(Type type) {
         this.type = type;
     }
+
+    public String getRole() { return this.role; }
 
     public void switchStatus() {
         this.status = (this.status == status.Passager) ? status.Chauffeur : status.Passager;
@@ -148,17 +151,15 @@ public class Profile extends Utilisateur{
 
     public Profile(String nom, String prenom, double matricule, float rep, status status, List<String> itineraire, List<String> preferences, Horaire horaire, Type type) throws IOException {
         super(nom, prenom, matricule, rep);
+        this.role = checkTypeUser();  // Input from user
         this.status = status;
         this.itineraire = itineraire;
         this.preferences = preferences;
         this.horaire = horaire;
         this.type = type;
 
-        // Ajouter ce profil à la map statique
         profilesMap.put(matricule, this);
-
-        // Sauvegarder le profil dans le fichier
-        sauvegarderProfil();
+        sauvegarderProfil(); // save into users.txt
     }
 
     /**
