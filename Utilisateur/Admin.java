@@ -169,9 +169,8 @@ public class Admin {
         reader.close();
     }
 
-    /**
-     * Visualiser les courses en cours à un instant donné
-     */
+    // Visualiser les courses en cours à un instant donné
+
     public void viewOngoingCourses() throws IOException {
         if (!Files.exists(Paths.get(COURSES_FILE))) {
             System.out.println("Aucune course enregistrée.");
@@ -196,9 +195,8 @@ public class Admin {
         }
     }
 
-    /**
-     * Visualiser l'historique des courses passées
-     */
+    // Visualiser l'historique des courses passées
+
     public void viewCourseHistory() throws IOException {
         if (!Files.exists(Paths.get(COURSES_FILE))) {
             System.out.println("Aucune course enregistrée.");
@@ -228,9 +226,8 @@ public class Admin {
         }
     }
 
-    /**
-     * Filtrer les courses par date
-     */
+    // Filtrer les courses par date
+
     public void viewCoursesByDate(String date) throws IOException {
         if (!Files.exists(Paths.get(COURSES_FILE))) {
             System.out.println("Aucune course enregistrée.");
@@ -255,9 +252,8 @@ public class Admin {
         }
     }
 
-    /**
-     * Générer des statistiques d'utilisation de l'application
-     */
+    // Générer des statistiques d'utilisation de l'application
+
     public void generateStats() throws IOException {
         Map<String, Integer> userTypeCount = countUsersByType();
         int activeUsers = countActiveUsers();
@@ -300,9 +296,8 @@ public class Admin {
         }
     }
 
-    /**
-     * Compter le nombre d'utilisateurs par type
-     */
+    // Compter le nombre d'utilisateurs par type
+
     private Map<String, Integer> countUsersByType() throws IOException {
         Map<String, Integer> userTypeCount = new HashMap<>();
 
@@ -326,9 +321,8 @@ public class Admin {
         return userTypeCount;
     }
 
-    /**
-     * Compter le nombre d'utilisateurs actifs (qui ont participé à au moins une course)
-     */
+    // Compter le nombre d'utilisateurs actifs (qui ont participé à au moins une course)
+
     private int countActiveUsers() throws IOException {
         Set<Double> activeUsers = new HashSet<>();
 
@@ -340,17 +334,16 @@ public class Admin {
         for (String line : lines) {
             String[] parts = line.split(",");
             if (parts.length >= 2) {
-                activeUsers.add(Double.parseDouble(parts[0])); // Chauffeur
-                activeUsers.add(Double.parseDouble(parts[1])); // Passager
+                activeUsers.add(Double.parseDouble(parts[0]));
+                activeUsers.add(Double.parseDouble(parts[1])); 
             }
         }
 
         return activeUsers.size();
     }
 
-    /**
-     * Compter le nombre de courses par catégorie d'utilisateur
-     */
+    // Compter le nombre de courses par catégorie d'utilisateur
+
     private Map<String, Integer> countCoursesByCategory() throws IOException {
         Map<String, Integer> coursesByCategory = new HashMap<>();
 
@@ -375,9 +368,8 @@ public class Admin {
         return coursesByCategory;
     }
 
-    /**
-     * Obtenir les meilleurs chauffeurs selon leur note moyenne
-     */
+    // Obtenir les meilleurs chauffeurs selon leur note moyenne
+
     private List<Map.Entry<Double, Float>> getTopDrivers(int limit) throws IOException {
         Map<Double, Float> driverRatings = new HashMap<>();
         Map<Double, Integer> driverCounts = new HashMap<>();
@@ -409,9 +401,8 @@ public class Admin {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Obtenir les utilisateurs avec les notes les plus basses
-     */
+    // Obtenir les utilisateurs avec les notes les plus basses
+
     private List<Map.Entry<Double, Float>> getWorstUsers(int limit) throws IOException {
         Map<Double, Float> userRatings = new HashMap<>();
         Map<Double, Integer> userCounts = new HashMap<>();
@@ -448,9 +439,8 @@ public class Admin {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Afficher le menu d'administration
-     */
+    // Afficher le menu d'administration
+
     public void showAdminMenu() {
         Scanner sc = new Scanner(System.in);
         int choice = 0;
@@ -471,7 +461,7 @@ public class Admin {
 
             try {
                 choice = sc.nextInt();
-                sc.nextLine(); // Clear buffer
+                sc.nextLine();
 
                 switch (choice) {
                     case 1:
@@ -521,7 +511,7 @@ public class Admin {
             } catch (Exception e) {
                 System.out.println("Erreur: " + e.getMessage());
                 e.printStackTrace();
-                sc.nextLine(); // Clear buffer
+                sc.nextLine();
             }
         }
     }
