@@ -5,11 +5,17 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Profile extends Utilisateur{
+    public static void refreshMoyenne(Profile chauffeur, Profile passager, int noteChauff, int notePass) {
+    }
+
     private enum status { Passager, Chauffeur }
     private static status status;
     private List<String> itineraire;
@@ -23,6 +29,10 @@ public class Profile extends Utilisateur{
     private int nbPass = 0;
     private int nbChauff = 0;
     private static final String FICHIER_DEMANDES = "demands.txt";
+    private static final String FICHIER_PROFILES = "profiles.txt";
+
+    // Map pour stocker tous les profils en mémoire (pour un accès rapide)
+    private static Map<Double, Profile> profilesMap = new HashMap<>();
 
     public status getStatus() {
         return status;
@@ -56,7 +66,7 @@ public class Profile extends Utilisateur{
         this.horaire = horaire;
     }
 
-    public Type  getType() {
+    public Type getType() {
         return type;
     }
 
@@ -70,11 +80,15 @@ public class Profile extends Utilisateur{
 
     public float calculMoyenne() {
         if (nbPass == 0 && nbChauff == 0) return 0;
-        if (status == status.Passager) return moyPass / nbChauff;
-        if (status == status.Chauffeur) return moyChauff / nbPass;
+        if (status == status.Passager) return moyPass / nbPass;  // Fixed: was moyPass / nbChauff
+        if (status == status.Chauffeur) return moyChauff / nbChauff;  // Fixed: was moyChauff / nbPass
         return (moyPass + moyChauff) / (nbPass + nbChauff);
     }
 
+    /**
+     * Met à jour la moyenne des notes pour l'utilisateur en fonction des évaluations reçues
+     * @param rating La note reçue
+     */
     public void refreshMoyenne(float rating) {
         if (status == status.Passager) {
             moyPass += rating;
@@ -84,6 +98,52 @@ public class Profile extends Utilisateur{
             nbChauff++;
         }
         setReputation(calculMoyenne());
+
+        // Mettre à jour le profil dans le fichier
+        try {
+            mettreAJourProfil();
+        } catch (IOException e) {
+            System.out.println("Erreur lors de la mise à jour du profil: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Met à jour les moyennes des notes pour le chauffeur et le passager impliqués dans une course
+     * @param matChauffeur Le matricule du chauffeur
+     * @param matPassager Le matricule du passager
+     * @param noteChauffeur La note attribuée au chauffeur
+     * @param notePassager La note attribuée au passager
+     * @return true si la mise à jour a réussi, false sinon
+     */
+    public static boolean refreshMoyenne(double matChauffeur, double matPassager, float noteChauffeur, float notePassager) {
+        // Récupérer les profils par matricule
+        Profile chauffeur = getProfileByMatricule(matChauffeur);
+        Profile passager = getProfileByMatricule(matPassager);
+
+        if (chauffeur == null || passager == null) {
+            System.out.println("Erreur: Un ou plusieurs profils non trouvés.");
+            return false;
+        }
+
+        // Mise à jour pour le chauffeur
+        chauffeur.moyChauff += noteChauffeur;
+        chauffeur.nbChauff++;
+        chauffeur.setReputation(chauffeur.calculMoyenne());
+
+        // Mise à jour pour le passager
+        passager.moyPass += notePassager;
+        passager.nbPass++;
+        passager.setReputation(passager.calculMoyenne());
+
+        // Sauvegarder les modifications
+        try {
+            chauffeur.mettreAJourProfil();
+            passager.mettreAJourProfil();
+            return true;
+        } catch (IOException e) {
+            System.out.println("Erreur lors de la mise à jour des profils: " + e.getMessage());
+            return false;
+        }
     }
 
     public Profile(String nom, String prenom, double matricule, float rep, status status, List<String> itineraire, List<String> preferences, Horaire horaire, Type type) throws IOException {
@@ -93,6 +153,166 @@ public class Profile extends Utilisateur{
         this.preferences = preferences;
         this.horaire = horaire;
         this.type = type;
+
+        // Ajouter ce profil à la map statique
+        profilesMap.put(matricule, this);
+
+        // Sauvegarder le profil dans le fichier
+        sauvegarderProfil();
+    }
+
+    /**
+     * Sauvegarde le profil dans le fichier des profils
+     */
+    private void sauvegarderProfil() throws IOException {
+        String profileData = getNom() + "," +
+                getPrenom() + "," +
+                getMatricule() + "," +
+                getReputation() + "," +
+                status + "," +
+                String.join("|", itineraire) + "," +
+                String.join("|", preferences) + "," +
+                horaire + "," +
+                type + "," +
+                moyPass + "," +
+                moyChauff + "," +
+                nbPass + "," +
+                nbChauff + "\n";
+
+        Files.write(Paths.get(FICHIER_PROFILES),
+                profileData.getBytes(StandardCharsets.UTF_8),
+                StandardOpenOption.CREATE,
+                StandardOpenOption.APPEND);
+    }
+
+    /**
+     * Met à jour le profil dans le fichier des profils
+     */
+    public void mettreAJourProfil() throws IOException {
+        if (!Files.exists(Paths.get(FICHIER_PROFILES))) {
+            sauvegarderProfil();
+            return;
+        }
+
+        List<String> lines = Files.readAllLines(Paths.get(FICHIER_PROFILES));
+        boolean found = false;
+
+        for (int i = 0; i < lines.size(); i++) {
+            String[] parts = lines.get(i).split(",");
+            if (parts.length >= 3 && Double.parseDouble(parts[2]) == getMatricule()) {
+                String updatedLine = getNom() + "," +
+                        getPrenom() + "," +
+                        getMatricule() + "," +
+                        getReputation() + "," +
+                        status + "," +
+                        String.join("|", itineraire) + "," +
+                        String.join("|", preferences) + "," +
+                        horaire + "," +
+                        type + "," +
+                        moyPass + "," +
+                        moyChauff + "," +
+                        nbPass + "," +
+                        nbChauff;
+
+                lines.set(i, updatedLine);
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            sauvegarderProfil();
+        } else {
+            Files.write(Paths.get(FICHIER_PROFILES), lines);
+        }
+    }
+
+    /**
+     * Récupère un profil par son matricule
+     * @param matricule Le matricule du profil à récupérer
+     * @return Le profil correspondant ou null si non trouvé
+     */
+    public static Profile getProfileByMatricule(double matricule) {
+        // Si le profil est déjà en mémoire, le retourner
+        if (profilesMap.containsKey(matricule)) {
+            return profilesMap.get(matricule);
+        }
+
+        // Sinon, essayer de le charger depuis le fichier
+        try {
+            if (!Files.exists(Paths.get(FICHIER_PROFILES))) {
+                return null;
+            }
+
+            List<String> lines = Files.readAllLines(Paths.get(FICHIER_PROFILES));
+
+            for (String line : lines) {
+                String[] parts = line.split(",");
+                if (parts.length >= 13 && Double.parseDouble(parts[2]) == matricule) {
+                    // Reconstruire le profil
+                    String nom = parts[0];
+                    String prenom = parts[1];
+                    float reputation = Float.parseFloat(parts[3]);
+                    status stat = status.valueOf(parts[4]);
+
+                    List<String> itineraire = Arrays.asList(parts[5].split("\\|"));
+                    List<String> preferences = Arrays.asList(parts[6].split("\\|"));
+
+                    Horaire hor = Horaire.valueOf(parts[7]);
+                    Type typ = Type.valueOf(parts[8]);
+
+                    // Créer le profil sans le sauvegarder à nouveau
+                    Profile profile = new Profile(nom, prenom, matricule, reputation, stat, itineraire, preferences, hor, typ);
+
+                    // Mettre à jour les moyennes et compteurs
+                    profile.moyPass = Float.parseFloat(parts[9]);
+                    profile.moyChauff = Float.parseFloat(parts[10]);
+                    profile.nbPass = Integer.parseInt(parts[11]);
+                    profile.nbChauff = Integer.parseInt(parts[12]);
+
+                    // Ajouter à la map et retourner
+                    profilesMap.put(matricule, profile);
+                    return profile;
+                }
+            }
+        } catch (IOException | NumberFormatException e) {
+            System.out.println("Erreur lors de la récupération du profil: " + e.getMessage());
+        }
+
+        return null;
+    }
+
+    /**
+     * Charge tous les profils depuis le fichier
+     */
+    public static List<Profile> chargerTousProfils() {
+        List<Profile> profiles = new ArrayList<>();
+
+        try {
+            if (!Files.exists(Paths.get(FICHIER_PROFILES))) {
+                return profiles;
+            }
+
+            List<String> lines = Files.readAllLines(Paths.get(FICHIER_PROFILES));
+
+            for (String line : lines) {
+                String[] parts = line.split(",");
+                if (parts.length >= 13) {
+                    double matricule = Double.parseDouble(parts[2]);
+
+                    // Si le profil n'est pas déjà chargé, le charger
+                    if (!profilesMap.containsKey(matricule)) {
+                        getProfileByMatricule(matricule);
+                    }
+
+                    profiles.add(profilesMap.get(matricule));
+                }
+            }
+        } catch (IOException | NumberFormatException e) {
+            System.out.println("Erreur lors du chargement des profils: " + e.getMessage());
+        }
+
+        return profiles;
     }
 
     public void ajouterDemande() throws IOException {
@@ -106,25 +326,16 @@ public class Profile extends Utilisateur{
         System.out.print("Heure de départ (HH:MM): ");
         String heure = sc.nextLine();
 
-        String demande = String.format(
-                "Demande de: %s %s (Mat: %.0f)\n" +
-                        "Statut: %s\n" +
-                        "Itinéraire: %s -> %s\n" +
-                        "Préférences: %s\n" +
-                        "Disponibilité: %s\n" +
-                        "Type: %s\n" +
-                        "Heure demandée: %s\n" +
-                        "Réputation: %.1f\n" +
-                        "----------------------------\n",
-                getNom(), getPrenom(), getMatricule(),
-                status.toString(),
-                depart, arrivee,
-                String.join(", ", preferences),
-                horaire.toString(),
-                type.toString(),
-                heure,
-                getReputation()
-        );
+        String demande = "Demande de: " + getNom() + " " + getPrenom() +
+                " (Mat: " + getMatricule() + ")\n" +
+                "Statut: " + status.toString() + "\n" +
+                "Itinéraire: " + depart + " -> " + arrivee + "\n" +
+                "Préférences: " + String.join(", ", preferences) + "\n" +
+                "Disponibilité: " + horaire.toString() + "\n" +
+                "Type: " + type.toString() + "\n" +
+                "Heure demandée: " + heure + "\n" +
+                "Réputation: " + String.format("%.1f", getReputation()) + "\n" +
+                "----------------------------\n";
 
         Files.write(Paths.get(FICHIER_DEMANDES),
                 demande.getBytes(StandardCharsets.UTF_8),
@@ -171,6 +382,7 @@ public class Profile extends Utilisateur{
             System.out.print("Réputation initiale (1-5): ");
             float reputation = sc.nextFloat();
             sc.nextLine();
+
 
             System.out.print("Statut (1-Passager, 2-Chauffeur): ");
             status statut = (sc.nextInt() == 1) ? status.Passager : status.Chauffeur;
@@ -231,6 +443,7 @@ public class Profile extends Utilisateur{
 
         } catch (Exception e) {
             System.out.println("Erreur: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }

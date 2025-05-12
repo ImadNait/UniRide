@@ -2,7 +2,6 @@ package Utilisateur;
 import java.io.*;
 import java.util.Scanner;
 
-
 public class Utilisateur {
 
     private final String nom ;
@@ -10,6 +9,10 @@ public class Utilisateur {
     private final double matricule ;
     private float reputation ;
     private static final String fpath = "users.txt";
+    protected final String typeUser;
+    // change encapsulation accordingly and without altering the means of security
+    Utilisateur(String nom, String prenom, double matricule, float rep) throws IOException { // throws IOException is used to be able to use the fileWriter
+        BufferedWriter writer = new BufferedWriter(new FileWriter(fpath,true));
     protected static final String fpath = "users.txt";
     protected final String typeUser;
     // change encapsulation accordingly and without altering the means of security
@@ -41,6 +44,7 @@ public class Utilisateur {
         return rep >= 0 && rep <= 5;
     }
     }
+
     public boolean checkRep(float rep){return rep >= 0 && rep <= 5;}
 
     public boolean checkNP(Object temp) {
@@ -54,6 +58,7 @@ public class Utilisateur {
         BufferedReader reader = new BufferedReader(new FileReader(fpath));
         String line = reader.readLine();
         String[] user = line.split(",");
+
         while(line != null) {
             line = reader.readLine();
             user = line.split(",");
@@ -65,6 +70,7 @@ public class Utilisateur {
     void printUsers(int i) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(fpath));
         String[] user = reader.readLine().split(",");
+
         while(i>0) {
             user = reader.readLine().split(",");
             showUser(user);
@@ -72,6 +78,7 @@ public class Utilisateur {
         }
         reader.close();
     }
+    boolean findUser(double mat) throws IOException {
 
     void findUser(double mat) throws IOException {
         BufferedReader reader  = new BufferedReader(new FileReader(fpath));
@@ -84,14 +91,17 @@ public class Utilisateur {
         while (user != null) {
             String[] fmat = user.split(",");
             if (fmat.length > 0 && Double.parseDouble(fmat[0]) == mat) {
+                System.out.println("User with matricule " + mat + " found.");
                 showUser(fmat);
-                break;
+                return true ;
             }
+            fmat = user.split(",");
         }
         if (!found) {
             System.out.println("User with matricule " + mat + " not found.");
         }
         reader.close();
+        return found;
                 System.out.println("User with matricule " + mat + " found.");
                 showUser(fmat);
                 return true ;
@@ -138,9 +148,23 @@ public class Utilisateur {
     void showUser(String[] fmat) throws IOException {System.out.println("Matricule: " + fmat[0] + "\nNom: " + fmat[1] + "\nPrenom: " + fmat[2] + "\nReputation: " + fmat[3] + "\n-------------------------------------");}
     void showUser(String[] fmat,int i) throws IOException { /// overloaded showUser to show a certain number of users which is contained in the variable i
         if (i==0){return;} else if (i>3 || i<0) {
-            System.out.println("the number has to be between 1 and 4"); return;
+            System.out.println("The number has to be between 1 and 4"); return;
         }else{
             while(i>0){System.out.println(fmat[i]+"\n"); i--;}}
+    }
+
+    boolean checkDate(double mat ){
+        String matString = String.format("%.0f", mat);
+        String year1 = matString.substring(0,2);
+        String year2 = matString.substring(2,4);
+        int y1 = Integer.parseInt(year1);
+        int y2 = Integer.parseInt(year2);
+        int ymat = Integer.parseInt(matString);
+
+        if (matString.length() < 4) {
+            return false;
+        }
+        return y1 > ymat || y2 > ymat;
     }
 
     String checkTypeUser(){
