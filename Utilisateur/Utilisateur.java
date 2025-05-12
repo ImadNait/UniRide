@@ -93,6 +93,7 @@ public class Utilisateur {
             if (fmat.length > 0 && Double.parseDouble(fmat[0]) == mat) {
                 System.out.println("User with matricule " + mat + " found.");
                 showUser(fmat);
+
                 return true ;
             }
             fmat = user.split(",");
