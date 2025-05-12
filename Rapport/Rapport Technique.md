@@ -181,7 +181,7 @@
 
 * **Retourne une liste d’objets Course pour un utilisateur donné (qu’il soit chauffeur ou passager).**
 
-**Classe Admin (Khateb Abdelkrim - Nait Mihoub Imad)**
+## **Classe Admin (Khateb Abdelkrim \- Nait Mihoub Imad)**
 
 **Structure et Fonctionnalités**
 
