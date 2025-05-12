@@ -13,7 +13,7 @@
 * **Course : gestion du cycle de vie des courses**  
 * **Admin : fonctionnalités administratives, incluant la gestion de la liste noire**
 
-## **Classe Utilisateur Khateb Abdelkrim**
+## **Classe Utilisateur (Khateb Abdelkrim)**
 
 **La classe implémente un système de gestion d'utilisateurs avec persistance des données dans un fichier texte.**
 
@@ -48,7 +48,7 @@
 * **L'accès aux données est protégé par des accesseurs**  
 * **La validation stricte lors de la création empêche les données incorrectes**
 
-## **Classe Profile Nait Mihoub Imad**
+## **Classe Profile (Nait Mihoub Imad)**
 
 **La classe Profile implémente des fonctionnalités spécifiques à une application de covoiturage. Elle gère deux rôles distincts (passager/chauffeur), des préférences utilisateur, et un système d'évaluation.**
 
@@ -77,7 +77,7 @@
 * **Calcul de moyennes différenciées selon le statut (passager/chauffeur)**  
 * **Méthodes pour mettre à jour les réputations après chaque course**
 
-## **Classe Etudiant Kaci Ramy**
+## **Classe Etudiant (Kaci Ramy)**
 
 ### **Description :**
 
@@ -95,7 +95,7 @@
 
 * **Méthodes d’accès get() et de modification set() pour chaque attribut spécifique.**
 
-## **Classe ATS Kaci Ramy**
+## **Classe ATS (Kaci Ramy)**
 
 ### **Description :**
 
@@ -111,7 +111,7 @@
 * **Constructeur super() — Pour initialiser les attributs hérités.**  
 * **Accesseurs et mutateurs (set()/get()) pour ses attributs spécifiques.**
 
-## **Classe Enseignant Kaci Ramy**
+## **Classe Enseignant (Kaci Ramy)**
 
 ## **Description :**
 
@@ -127,7 +127,7 @@
 * **Constructeur super() — Pour l’initialisation via la classe parente.**  
 * **Méthodes d'accès et de modification pour ses attributs.**
 
-## **Classe Course Nait Mihoub Imad**
+## **Classe Course (Nait Mihoub Imad)**
 
 **La classe course  a été conçue pour modéliser une course entre deux utilisateurs : un chauffeur et un passager, identifiés par leurs numéro de matricule. Cette classe gère le cycle de  la course, l’évaluation mutuelle des utilisateurs, et les données dans un fichier texte (courses.txt).**
 
@@ -181,7 +181,7 @@
 
 * **Retourne une liste d’objets Course pour un utilisateur donné (qu’il soit chauffeur ou passager).**
 
-**Classe Admin Khateb Abdelkrim \- Nait Mihoub Imad**
+**Classe Admin (Khateb Abdelkrim - Nait Mihoub Imad)**
 
 **Structure et Fonctionnalités**
 
