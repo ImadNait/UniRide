@@ -13,36 +13,57 @@ public class Utilisateur {
     // change encapsulation accordingly and without altering the means of security
     Utilisateur(String nom, String prenom, double matricule, float rep) throws IOException { // throws IOException is used to be able to use the fileWriter
         BufferedWriter writer = new BufferedWriter(new FileWriter(fpath,true));
-    protected static final String fpath = "users.txt";
-    protected final String typeUser;
-    // change encapsulation accordingly and without altering the means of security
-    Utilisateur(String nom, String prenom, double matricule, float rep) throws IOException { // throws IOException is used to be able to use the fileWriter
+        protected static final String fpath = "users.txt";
+        protected final String typeUser;
+        // change encapsulation accordingly and without altering the means of security
+        Utilisateur(String nom, String prenom, double matricule, float rep) throws IOException { // throws IOException is used to be able to use the fileWriter
             BufferedWriter writer = new BufferedWriter(new FileWriter(fpath,true));
 
-        if (!checkNP(nom) || !checkNP(prenom)) {throw new IllegalArgumentException("The name should contain letters only");} // to get rid of the might not be init for final variables problem fixed
-        if (checkDate(matricule)) {this.matricule = matricule;}
-        else{throw new IllegalArgumentException("Invalid matricule year, Try again");}  // to get rid of the might not be init for final variables problem fixed
+            if (!checkNP(nom) || !checkNP(prenom)) {throw new IllegalArgumentException("The name should contain letters only");} // to get rid of the might not be init for final variables problem fixed
+            if (checkDate(matricule)) {this.matricule = matricule;}
+            else{throw new IllegalArgumentException("Invalid matricule year, Try again");}  // to get rid of the might not be init for final variables problem fixed
+            this.nom = nom;
+            this.prenom = prenom;
+            this.matricule = matricule;
+            BufferedWriter writer = new BufferedWriter(new FileWriter(fpath,true));
+            this.typeUser = checkTypeUser();
+
+            setReputation(rep);
+            writer.write(String.format("%.0f",matricule) + "," + nom + "," + prenom + "," + rep + "\n");
+            writer.close();
+        }
+        protected String getNom() {return this.nom;}
+        protected String getPrenom() {return this.prenom;}
+        protected double getMatricule() {return this.matricule;}
+        protected float getReputation() {return this.reputation;}
+        protected void setReputation(float rep) {
+            if(checkRep(rep)){this.reputation = rep;}
+            else{ System.out.println("Value entered out of range choose a value between 1 and 5");}
+        }
+        public boolean checkRep(float rep){
+            return rep >= 0 && rep <= 5;
+        }
+    }
+
+    public Utilisateur(String nom, String prenom, double matricule, String typeUser) {
         this.nom = nom;
         this.prenom = prenom;
         this.matricule = matricule;
-        BufferedWriter writer = new BufferedWriter(new FileWriter(fpath,true));
-        this.typeUser = checkTypeUser();
+        this.typeUser = typeUser;
+    }
 
-        setReputation(rep);
-        writer.write(String.format("%.0f",matricule) + "," + nom + "," + prenom + "," + rep + "\n");
-        writer.close();
+    public Utilisateur(String nom, String prenom, double matricule, String typeUser) {
+        this.nom = nom;
+        this.prenom = prenom;
+        this.matricule = matricule;
+        this.typeUser = typeUser;
     }
-    protected String getNom() {return this.nom;}
-    protected String getPrenom() {return this.prenom;}
-    protected double getMatricule() {return this.matricule;}
-    protected float getReputation() {return this.reputation;}
-    protected void setReputation(float rep) {
-        if(checkRep(rep)){this.reputation = rep;}
-        else{ System.out.println("Value entered out of range choose a value between 1 and 5");}
-    }
-    public boolean checkRep(float rep){
-        return rep >= 0 && rep <= 5;
-    }
+
+    public Utilisateur(String nom, String prenom, double matricule, String typeUser) {
+        this.nom = nom;
+        this.prenom = prenom;
+        this.matricule = matricule;
+        this.typeUser = typeUser;
     }
 
     public boolean checkRep(float rep){return rep >= 0 && rep <= 5;}
@@ -78,31 +99,31 @@ public class Utilisateur {
         }
         reader.close();
     }
-    boolean findUser(double mat) throws IOException {
+    static boolean findUser(double mat) throws IOException {
 
-    void findUser(double mat) throws IOException {
-        BufferedReader reader  = new BufferedReader(new FileReader(fpath));
+        void findUser(double mat) throws IOException {
+            BufferedReader reader  = new BufferedReader(new FileReader(fpath));
 
-    public static boolean findUser(double mat) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(fpath));
-        String user = reader.readLine();
-        boolean found = false;
+            public static boolean findUser(double mat) throws IOException {
+                BufferedReader reader = new BufferedReader(new FileReader(fpath));
+                String user = reader.readLine();
+                boolean found = false;
 
-        while (user != null) {
-            String[] fmat = user.split(",");
-            if (fmat.length > 0 && Double.parseDouble(fmat[0]) == mat) {
-                System.out.println("User with matricule " + mat + " found.");
-                showUser(fmat);
+                while (user != null) {
+                    String[] fmat = user.split(",");
+                    if (fmat.length > 0 && Double.parseDouble(fmat[0]) == mat) {
+                        System.out.println("User with matricule " + mat + " found.");
+                        showUser(fmat);
 
-                return true ;
-            }
-            fmat = user.split(",");
-        }
-        if (!found) {
-            System.out.println("User with matricule " + mat + " not found.");
-        }
-        reader.close();
-        return found;
+                        return true ;
+                    }
+                    fmat = user.split(",");
+                }
+                if (!found) {
+                    System.out.println("User with matricule " + mat + " not found.");
+                }
+                reader.close();
+                return found;
                 System.out.println("User with matricule " + mat + " found.");
                 showUser(fmat);
                 return true ;
