@@ -54,9 +54,8 @@ public class Main {
         }
     }
 
-    /**
-     * Initialise les fichiers nécessaires s'ils n'existent pas
-     */
+    // Initialise les fichiers nécessaires s'ils n'existent pas
+ 
     private static void initializeFiles() {
         try {
             // Créer les fichiers s'ils n'existent pas
@@ -69,9 +68,8 @@ public class Main {
         }
     }
 
-    /**
-     * Crée un fichier s'il n'existe pas
-     */
+    // Crée un fichier s'il n'existe pas
+
     private static void createFileIfNotExists(String fileName) throws IOException {
         File file = new File(fileName);
         if (!file.exists()) {
@@ -80,9 +78,8 @@ public class Main {
         }
     }
 
-    /**
-     * Interface pour créer un compte utilisateur
-     */
+    // Interface pour créer un compte utilisateur
+
     private static void creerCompte() throws IOException {
         System.out.println("\n=== Création de compte ===");
 
@@ -175,9 +172,8 @@ public class Main {
         System.out.println("\nCompte créé avec succès ! Vous pouvez maintenant vous connecter.");
     }
 
-    /**
-     * Crée un profil pour l'utilisateur
-     */
+    // Crée un profil pour l'utilisateur
+
     private static void createUserProfile(Utilisateur utilisateur, double matricule) throws IOException {
         System.out.println("\n=== Configuration du profil ===");
 
@@ -226,9 +222,8 @@ public class Main {
         );
     }
 
-    /**
-     * Interface de connexion utilisateur
-     */
+    // Interface de connexion utilisateur
+
     private static void seConnecter() throws IOException {
         System.out.println("\n=== Connexion ===");
 
@@ -266,9 +261,8 @@ public class Main {
         afficherMenuUtilisateur(profil);
     }
 
-    /**
-     * Vérifie si un utilisateur est banni
-     */
+    // Vérifie si un utilisateur est banni
+
     private static boolean isUserBanned(double matricule) {
         try {
             File file = new File("blacklist.txt");
@@ -293,9 +287,8 @@ public class Main {
         return false;
     }
 
-    /**
-     * Vérifie si un utilisateur existe dans le système
-     */
+    // Vérifie si un utilisateur existe dans le système
+
     private static boolean userExists(double matricule) {
         try {
             File file = new File(USERS_FILE);
@@ -321,9 +314,8 @@ public class Main {
         return false;
     }
 
-    /**
-     * Affiche le menu utilisateur après connexion
-     */
+    // Affiche le menu utilisateur après connexion
+
     private static void afficherMenuUtilisateur(Profile profil) throws IOException {
         while (true) {
             boolean isPassager = profil.getStatus().toString().equals("Passager");
@@ -379,9 +371,8 @@ public class Main {
         }
     }
 
-    /**
-     * Permet à un passager de faire une demande de course
-     */
+    // Permet à un passager de faire une demande de course
+
     private static void faireDemandeCoursePourPassager(Profile profil) throws IOException {
         System.out.println("\n=== Faire une demande de course ===");
 
@@ -413,9 +404,8 @@ public class Main {
         System.out.println("Demande de course enregistrée avec succès !");
     }
 
-    /**
-     * Affiche les demandes de course disponibles pour les chauffeurs
-     */
+    // Affiche les demandes de course disponibles pour les chauffeurs
+
     private static void voirDemandesDisponibles(Profile profil) throws IOException {
         System.out.println("\n=== Demandes de course disponibles ===");
 
@@ -469,9 +459,8 @@ public class Main {
         }
     }
 
-    /**
-     * Permet à un chauffeur d'accepter une demande de course
-     */
+    // Permet à un chauffeur d'accepter une demande de course
+
     private static void accepterDemande(String demande, Profile chauffeur) throws IOException {
         // Extraire les informations de la demande
         String[] lignes = demande.split("\n");
@@ -499,9 +488,8 @@ public class Main {
         }
     }
 
-    /**
-     * Supprime une demande de course du fichier
-     */
+    // Supprime une demande de course du fichier
+
     private static void supprimerDemande(String demande) throws IOException {
         List<String> toutesLignes = Files.readAllLines(Paths.get(DEMANDS_FILE));
         String contenuFichier = String.join("\n", toutesLignes);
@@ -516,9 +504,8 @@ public class Main {
         Files.write(Paths.get(DEMANDS_FILE), contenuFichier.getBytes());
     }
 
-    /**
-     * Permet de terminer une course
-     */
+    // Permet de terminer une course
+
     private static void terminerCourse(Course course) throws IOException {
         System.out.println("\n=== Terminer la course ===");
 
@@ -567,9 +554,8 @@ public class Main {
         System.out.println("\nCourse terminée avec succès !");
     }
 
-    /**
-     * Affiche l'historique des courses d'un utilisateur
-     */
+    // Affiche l'historique des courses d'un utilisateur
+
     private static void voirHistoriqueCourses(Profile profil) throws IOException {
         System.out.println("\n=== Historique de mes courses ===");
 
@@ -611,9 +597,7 @@ public class Main {
         }
     }
 
-    /**
-     * Permet de modifier le profil utilisateur
-     */
+    // Permet de modifier le profil utilisateur
     private static void modifierProfil(Profile profil) throws IOException {
         System.out.println("\n=== Modifier mon profil ===");
 
@@ -671,9 +655,8 @@ public class Main {
         System.out.println("Profil mis à jour avec succès !");
     }
 
-    /**
-     * Interface d'accès administrateur
-     */
+    // Interface d'accès administrateur
+
     private static void accesAdmin() {
         System.out.println("\n=== Accès Administrateur ===");
 
