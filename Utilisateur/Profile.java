@@ -16,13 +16,13 @@ public class Profile extends Utilisateur{
     public static void refreshMoyenne(Profile chauffeur, Profile passager, int noteChauff, int notePass) {
     }
 
-    private enum status { Passager, Chauffeur }
+    protected enum status { Passager, Chauffeur }
     private static status status;
     private List<String> itineraire;
     private List<String> preferences;
-    private enum Horaire { Journalier, Hebdomadaire, Quotidien }
+    protected enum Horaire { Journalier, Hebdomadaire, Quotidien }
     private static Horaire horaire;
-    private enum Type { allerRetour, aller, retour }
+    protected enum Type { allerRetour, aller, retour }
     private static Type type;
     private float moyPass = 0;
     private float moyChauff = 0;
